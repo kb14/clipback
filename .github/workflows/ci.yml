@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    # Only once kb14/clipback is public, where macOS runners are free. In a private repo they use up the
+    # account's Actions minutes at ten times the Linux rate.
+    if: github.repository == 'kb14/clipback' && !github.event.repository.private
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+      - name: Core tests
+        run: swift test
+      - name: Release build
+        run: CONFIG=Release ./scripts/build.sh
