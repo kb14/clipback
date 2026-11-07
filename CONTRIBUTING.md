@@ -24,6 +24,20 @@ This renders every screen of the review window, plus the capture panel, to `buil
 
 Developer runs like this one never change your own settings or clips. They save into a scratch copy of the settings, and the made-up clips live in a temporary folder.
 
+## Scripts
+
+Everything in `scripts/`, run from the repo root:
+
+| Script | What it does |
+|---|---|
+| `install.sh` | Builds Clipback and installs it in Applications. Use this for the copy you run every day. |
+| `run.sh` | Builds a test copy in `build/` and runs it, quitting any running Clipback first. Run `install.sh` again when you're done. |
+| `build.sh` | Builds the app without running it. The other scripts call it. `CONFIG=Release` makes an optimised build. |
+| `snapshots.sh` | Saves a picture of every screen to `build/snapshots/`, so you can check UI changes. Your own clips and settings aren't changed. |
+| `readme-images.sh` | Makes the screenshots in the README from made-up clips. Pass `dark` for dark mode. |
+| `release.sh` | Makes a signed, notarized DMG in `dist/`. Needs a Developer ID certificate and Apple notary credentials; see the comments at the top. |
+| `make-icon.swift` | Draws the app icon. Run it with `swift scripts/make-icon.swift`. |
+
 ## Code style
 
 - Swift 6 language mode. UI and app state are `@MainActor`.

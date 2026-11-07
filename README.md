@@ -6,7 +6,7 @@
 
 <p align="center">Save a quote or a screenshot from any Mac app, and see it again later.</p>
 
-Clipback is a menu bar app for saving the bits worth keeping from whatever you read on your Mac. Select some text anywhere (a web page, a Slack thread, a PDF in Preview, a reply in the Claude app) and press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>Space</kbd>. It saves the text as a markdown file along with the page, file or app it came from. Press the same keys with nothing selected and you can drag over part of the screen instead; the text in that screenshot is read on your Mac, so search finds it later.
+Clipback is a menu bar app for saving the bits worth keeping from whatever you read on your Mac. Select some text anywhere (a web page, a Slack thread, a PDF in Preview, a reply in the Claude app) and press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>Space</kbd>. It saves the text as a markdown file along with the page, file or app it came from. With nothing selected, the same keys take a screenshot instead: drag over the part of the screen you want to keep. Clipback reads the text in the screenshot on your Mac, so search can find it later.
 
 Then it brings things back. A quote you want to remember shows up again the next day, then after three days, a week, and so on. Something you want to raise with a colleague waits under their name until your next call. It only keeps what you clip on purpose, so it's not a clipboard manager.
 
@@ -51,11 +51,11 @@ There are two libraries, Work and Personal. Unless you pick one from the menu ba
 
 ## Privacy
 
-Clipback doesn't connect to the internet. There's no account and no analytics, and nothing is sent to an AI service; LuLu or Little Snitch will show it never asks to go online.
+Clipback doesn't connect to the internet. There's no account and no analytics, and nothing is sent to an AI service.
 
 It reads the screen only when you press the hotkey, and keeps only the part you picked. For text clips it also keeps one screenshot of the window the text came from, so you can see it in context later. Clips are plain markdown files in `~/Clipback` (or a folder you choose), and they stay there if you delete the app.
 
-Clipback's own windows don't appear when you share your screen in Zoom, Meet or Slack. It won't capture from password fields, 1Password, Bitwarden or Apple's Passwords app.
+Clipback's own windows don't appear when you share your screen in Zoom, Meet or Slack. It won't capture while a password field is focused, or while 1Password, Bitwarden or Apple's Passwords app is in front.
 
 macOS will ask for three permissions:
 
@@ -113,7 +113,9 @@ You can open the folder as an Obsidian vault, grep it, or back it up like any ot
 
 ## Why I made it
 
-I read in a lot of places in a day: articles, Slack, PDFs, meeting notes, long answers from Claude. The useful bits ended up as bookmarks and screenshots I never looked at again, and when I did find one I'd forgotten where it came from. I wanted one key that works in every app, keeps the source, and puts the thing back in front of me at the right time: on a schedule if I want to remember it, or in my next call with the person it's about.
+I read in a lot of places in a day: articles, Slack, PDFs, meeting notes, long answers from Claude. The good bits ended up as bookmarks and screenshots I never opened again. When I did find one, I'd forgotten where it came from.
+
+So I wanted one key that works in every app and remembers the source. And I wanted the clip to come back when it's useful: a few days later if I'm trying to remember it, or in my next call with the person it's about.
 
 ## Build from source
 
@@ -130,9 +132,9 @@ swift test                 # core tests
 
 ## Contributing
 
-Issues and pull requests are welcome. If you change the UI, `./scripts/snapshots.sh` renders every screen to PNGs, using both your own clips and a set of made-up ones. The screenshots in this README come from `./scripts/readme-images.sh`.
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for building, testing and checking UI changes.
 
-Most of the code was written with Claude Code. I designed the app, reviewed every change, and use it every day.
+Built with [Claude Code](https://claude.com/claude-code).
 
 ## License
 
