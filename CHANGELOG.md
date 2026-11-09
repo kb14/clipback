@@ -11,3 +11,4 @@ First public release.
 - Work and Personal libraries, picked by work hours and by apps you list in Settings.
 - Text in screenshots read on your Mac, searchable and selectable.
 - Hidden from screen shares. No network access.
+rules test
