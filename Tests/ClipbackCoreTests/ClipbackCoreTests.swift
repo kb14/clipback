@@ -239,7 +239,7 @@ private let created = Date(timeIntervalSince1970: 1_793_005_330)
             Clip(library: .work, intent: .call, person: "Sam", title: "Partner list", source: ClipSource(app: "Chrome"),
                  selection: "Three partners"),
         ]
-        let text = Agenda.markdown(person: "Sam", clips: clips, date: created, timeZone: ist)
+        let text = Agenda.markdown(person: "Sam", clips: clips, date: created, timeZone: ist, locale: Locale(identifier: "en_GB"))
         #expect(text == "## Sam · 26 Oct\n\n1. check margin\n   > Two pricing options by Friday\n2. Partner list\n   > Three partners\n")
     }
 }

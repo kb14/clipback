@@ -81,8 +81,10 @@ public enum ReviewQueue {
 
 /// A person's open Call items as markdown, ready to paste before the call.
 public enum Agenda {
-    public static func markdown(person: String, clips: [Clip], date: Date, timeZone: TimeZone = .current) -> String {
-        let day = date.formatted(Date.FormatStyle(timeZone: timeZone).day().month(.abbreviated))
+    /// The date follows the Mac's region ("26 Oct" or "Oct 26"); tests pass a fixed locale.
+    public static func markdown(person: String, clips: [Clip], date: Date, timeZone: TimeZone = .current,
+                                locale: Locale = .current) -> String {
+        let day = date.formatted(Date.FormatStyle(locale: locale, timeZone: timeZone).day().month(.abbreviated))
         var lines = ["## \(person) · \(day)", ""]
         for (index, clip) in clips.enumerated() {
             let note = NoteParser.readable(clip.note)
