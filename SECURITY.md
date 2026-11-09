@@ -8,4 +8,4 @@ Things that count, for example:
 - Clipback capturing from a password field or a password manager it should skip
 - clips or screenshots ending up anywhere outside your clips folder
 - Clipback's windows showing up in a screen share
-- any network request at all
+- any network request other than the update check

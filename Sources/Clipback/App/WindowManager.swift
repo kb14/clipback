@@ -1,5 +1,6 @@
 import AppKit
 import ClipbackCore
+import Sparkle
 import SwiftUI
 
 /// Owns Clipback's regular windows. Clipback lives in the menubar, but while any of these windows is open it also
@@ -8,6 +9,8 @@ import SwiftUI
 final class WindowManager {
     private var windows: [String: NSWindow] = [:]
     private var closeObservers: [String: NSObjectProtocol] = [:]
+    /// Sparkle's updater, for the "Check for updates automatically" switch in Settings. Set at launch.
+    var updater: SPUUpdater?
 
     /// Opens the review window, optionally at a section of a given library.
     func showLibrary(_ section: SidebarItem? = nil, in library: Library? = nil) {
@@ -28,8 +31,8 @@ final class WindowManager {
     }
 
     func showSettings() {
-        show(id: "settings", title: "Clipback Settings", size: NSSize(width: 520, height: 520), resizable: false) {
-            SettingsView(onReviewPermissions: { [weak self] in self?.showOnboarding() })
+        show(id: "settings", title: "Clipback Settings", size: NSSize(width: 520, height: 590), resizable: false) {
+            SettingsView(updater: updater, onReviewPermissions: { [weak self] in self?.showOnboarding() })
         }
     }
 
@@ -75,6 +78,12 @@ final class WindowManager {
     private func windowWillClose(_ id: String) {
         let othersOpen = windows.contains { $0.key != id && $0.value.isVisible }
         if !othersOpen { NSApp.setActivationPolicy(.accessory) }
+    }
+
+    /// Leaves the Dock unless one of Clipback's windows is still open. For windows WindowManager doesn't own,
+    /// like Sparkle's update window.
+    func leaveDockIfIdle() {
+        if !windows.values.contains(where: \.isVisible) { NSApp.setActivationPolicy(.accessory) }
     }
 
     /// Clicking the Dock icon with no window open brings the review window back.

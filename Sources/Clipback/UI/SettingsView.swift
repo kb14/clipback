@@ -1,9 +1,11 @@
 import AppKit
 import KeyboardShortcuts
 import ServiceManagement
+import Sparkle
 import SwiftUI
 
 struct SettingsView: View {
+    var updater: SPUUpdater?
     var onReviewPermissions: () -> Void
 
     @State private var settings = AppSettings.shared
@@ -11,6 +13,7 @@ struct SettingsView: View {
     @State private var launchStatus = SMAppService.mainApp.status
     @State private var launchError: String?
     @State private var workRules = AppSettings.shared.workRules.joined(separator: ", ")
+    @State private var checksForUpdates = false
 
     var body: some View {
         Form {
@@ -53,6 +56,14 @@ struct SettingsView: View {
                     ForEach(Appearance.allCases, id: \.self) { Text($0.title).tag($0) }
                 }
                 .pickerStyle(.segmented)
+                if let updater {
+                    // Stored by Sparkle, which also asks about it once, on the second launch.
+                    Toggle("Check for updates automatically", isOn: $checksForUpdates)
+                        .onAppear { checksForUpdates = updater.automaticallyChecksForUpdates }
+                        .onChange(of: checksForUpdates) { _, on in
+                            if updater.automaticallyChecksForUpdates != on { updater.automaticallyChecksForUpdates = on }
+                        }
+                }
                 Toggle("Launch at login", isOn: $launchAtLogin)
                     .onChange(of: launchAtLogin) { _, enabled in setLaunchAtLogin(enabled) }
                 if launchAtLogin && launchStatus == .requiresApproval {
@@ -73,7 +84,7 @@ struct SettingsView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             launchStatus = SMAppService.mainApp.status
         }
-        .frame(width: 520, height: 520)
+        .frame(width: 520, height: 590)
     }
 
     private func chooseVault() {

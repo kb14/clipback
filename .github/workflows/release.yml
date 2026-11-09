@@ -11,6 +11,7 @@ name: Release
 #   NOTARY_KEY_P8_BASE64       an App Store Connect API key (.p8, "Developer" role), base64
 #   NOTARY_KEY_ID              that key's ID
 #   NOTARY_ISSUER_ID           the issuer ID shown above the keys table in App Store Connect
+#   SPARKLE_ED_PRIVATE_KEY     the Sparkle update-signing key, exported with generate_keys -x
 on:
   push:
     tags: ['v*']
@@ -54,11 +55,15 @@ jobs:
           NOTARY_KEY_P8_BASE64: ${{ secrets.NOTARY_KEY_P8_BASE64 }}
           NOTARY_KEY_ID: ${{ secrets.NOTARY_KEY_ID }}
           NOTARY_ISSUER: ${{ secrets.NOTARY_ISSUER_ID }}
+          SPARKLE_ED_PRIVATE_KEY: ${{ secrets.SPARKLE_ED_PRIVATE_KEY }}
         run: |
           export NOTARY_KEY_PATH="$RUNNER_TEMP/AuthKey.p8"
+          export SPARKLE_KEY_FILE="$RUNNER_TEMP/sparkle.key"
+          export RELEASE_TAG="$GITHUB_REF_NAME"
           echo "$NOTARY_KEY_P8_BASE64" | base64 --decode > "$NOTARY_KEY_PATH"
+          printf '%s' "$SPARKLE_ED_PRIVATE_KEY" > "$SPARKLE_KEY_FILE"
           ./scripts/release.sh
-          rm "$NOTARY_KEY_PATH"
+          rm "$NOTARY_KEY_PATH" "$SPARKLE_KEY_FILE"
 
       - name: Publish the GitHub Release
         env:
@@ -66,4 +71,4 @@ jobs:
         run: |
           PRERELEASE=""
           case "$GITHUB_REF_NAME" in *-*) PRERELEASE="--prerelease" ;; esac
-          gh release create "$GITHUB_REF_NAME" dist/*.dmg --title "Clipback ${GITHUB_REF_NAME#v}" --generate-notes $PRERELEASE
+          gh release create "$GITHUB_REF_NAME" dist/*.dmg dist/appcast.xml --title "Clipback ${GITHUB_REF_NAME#v}" --generate-notes $PRERELEASE

@@ -17,7 +17,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>0.1.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>15.0</string>
 	<key>LSUIElement</key>
@@ -28,5 +28,9 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>© 2026 Kangkan Boro. MIT License.</string>
+	<key>SUFeedURL</key>
+	<string>https://github.com/kb14/clipback/releases/latest/download/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>rSav6K9YEFs9I/wnEaHFGbAI2wiLFr0J7CKOFtLJx1A=</string>
 </dict>
 </plist>

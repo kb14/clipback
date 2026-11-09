@@ -10,6 +10,7 @@ enum LoginItem {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let windows = WindowManager()
     private var menuBar: MenuBarController?
+    private var updater: Updater?
 
     /// A login item registered by an earlier copy of Clipback (e.g. the development build) would keep launching
     /// that copy. The installed app re-registers itself so login always opens /Applications/Clipback.app.
@@ -35,7 +36,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         AppSettings.shared.applyAppearance()
         NSApp.mainMenu = MainMenu.make()
         ClipLibrary.shared.start()
-        menuBar = MenuBarController(windows: windows)
+        let updater = Updater(windows: windows)
+        self.updater = updater
+        windows.updater = updater.updater
+        menuBar = MenuBarController(windows: windows, updater: updater)
         Hotkeys.register(
             onCapture: { CaptureCoordinator.shared.trigger() },
             onOpenClipback: { [windows] in windows.showLibrary() }

@@ -31,6 +31,14 @@ for bundle in "$BIN_DIR"/*.bundle; do
   [ -e "$bundle" ] && cp -R "$bundle" "$APP/Contents/Resources/"
 done
 
+# Sparkle, for in-app updates. ditto keeps the framework's symlinks. Its XPC services are only for sandboxed apps,
+# so they're left out, as Sparkle's docs suggest. The binary looks for it in Contents/Frameworks.
+mkdir -p "$APP/Contents/Frameworks"
+ditto "$BIN_DIR/Sparkle.framework" "$APP/Contents/Frameworks/Sparkle.framework"
+rm -rf "$APP/Contents/Frameworks/Sparkle.framework/XPCServices" "$APP/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices"
+otool -l "$APP/Contents/MacOS/Clipback" | grep -q "@executable_path/../Frameworks" ||
+  install_name_tool -add_rpath "@executable_path/../Frameworks" "$APP/Contents/MacOS/Clipback"
+
 # Prefer an explicit identity, then a Developer ID (the identity releases use, so the installed copy and a
 # downloaded one are the same app to macOS and keep the same permissions), then Apple Development, then ad-hoc.
 # Always with the hardened runtime and the entitlements, so every build behaves like a released one.
@@ -39,6 +47,5 @@ identity() { security find-identity -v -p codesigning | awk -v kind="$1" '$0 ~ k
 DEFAULT_ID="$(identity "Developer ID Application")"
 DEFAULT_ID="${DEFAULT_ID:-$(identity "Apple Development")}"
 SIGN_ID="${CLIPBACK_SIGN_ID:-${DEFAULT_ID:--}}"
-codesign --force --options runtime --timestamp=none --entitlements Resources/Clipback.entitlements \
-  --sign "$SIGN_ID" "$APP"
+./scripts/sign.sh "$APP" "$SIGN_ID"
 echo "Built $APP ($CONFIG, signed with: $SIGN_ID)"

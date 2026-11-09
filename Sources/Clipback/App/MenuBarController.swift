@@ -1,6 +1,7 @@
 import AppKit
 import KeyboardShortcuts
 import ClipbackCore
+import Sparkle
 
 /// The menubar icon and its menu. The icon shows how many clips wait in Today across both libraries.
 /// The menu is rebuilt each time it opens so it always reflects current state.
@@ -8,12 +9,14 @@ import ClipbackCore
 final class MenuBarController: NSObject, NSMenuDelegate {
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let windows: WindowManager
+    private let updater: Updater
     private let settings = AppSettings.shared
     private let clips = ClipLibrary.shared
     private var midnightTimer: Timer?
 
-    init(windows: WindowManager) {
+    init(windows: WindowManager, updater: Updater) {
         self.windows = windows
+        self.updater = updater
         super.init()
         statusItem.button?.image = MenuBarIcon.image()
         let menu = NSMenu()
@@ -80,6 +83,11 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         }
         menu.addItem(item("Settings…", #selector(showSettings), key: ","))
         menu.addItem(item("About Clipback", #selector(showAbout)))
+        // Sparkle's controller greys this out while a check is already running.
+        let checkForUpdates = NSMenuItem(title: "Check for Updates…",
+                                         action: #selector(SPUStandardUpdaterController.checkForUpdates(_:)), keyEquivalent: "")
+        checkForUpdates.target = updater.controller
+        menu.addItem(checkForUpdates)
         menu.addItem(.separator())
         menu.addItem(item("Quit Clipback", #selector(quit), key: "q"))
     }

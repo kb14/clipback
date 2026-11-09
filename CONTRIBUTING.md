@@ -44,4 +44,4 @@ Everything in `scripts/`, run from the repo root:
 - AppKit owns windows and panels; SwiftUI fills them. Every window and panel sets `sharingType = .none` so it stays out of screen shares.
 - The markdown files in the clips folder are the source of truth. Don't add anything that only lives in a database.
 - Logic that doesn't need AppKit goes in `ClipbackCore`, with tests.
-- Clipback makes no network requests. Please keep it that way.
+- The only network request is Sparkle's update check. Please keep it that way.

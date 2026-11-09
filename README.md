@@ -20,7 +20,7 @@ Download `Clipback-<version>.dmg` from the [latest release](https://github.com/k
 
 When you open it, a setup window asks for the two permissions it needs (see [Privacy](#privacy)). After that it lives in the menu bar.
 
-There's no automatic updating yet. To update, download the new DMG and replace the app; your clips and settings stay where they are. **About Clipback** in the menu bar shows your version and links here.
+Clipback updates itself. On its second launch it asks whether to check for new versions automatically, and **Check for Updates…** in the menu bar checks right away. Your clips and settings stay where they are. **About Clipback** shows your version.
 
 ## Usage
 
@@ -51,7 +51,7 @@ There are two libraries, Work and Personal. Unless you pick one from the menu ba
 
 ## Privacy
 
-Clipback doesn't connect to the internet. There's no account and no analytics, and nothing is sent to an AI service.
+Clipback only goes online to check GitHub for a new version, and you can turn that off in Settings. There's no account and no analytics, and nothing is sent to an AI service.
 
 It reads the screen only when you press the hotkey, and keeps only the part you picked. For text clips it also keeps one screenshot of the window the text came from, so you can see it in context later. Clips are plain markdown files in `~/Clipback` (or a folder you choose), and they stay there if you delete the app.
 

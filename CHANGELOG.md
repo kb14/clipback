@@ -10,4 +10,5 @@ First public release.
 - The review window: Today (spaced revision), Inbox, Revise, Calls (an agenda per person), To-do, Sources and Archive, with search.
 - Work and Personal libraries, picked by work hours and by apps you list in Settings.
 - Text in screenshots read on your Mac, searchable and selectable.
-- Hidden from screen shares. No network access.
+- Updates itself from GitHub Releases (Sparkle). It asks before checking automatically, and checking for updates is the only time it goes online.
+- Hidden from screen shares.
