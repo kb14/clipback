@@ -123,7 +123,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     /// link to its GitHub page, where new releases are.
     @objc private func showAbout() {
         let credits = NSMutableAttributedString(
-            string: "Save a quote or a screenshot from any Mac app, and see it again later.\n",
+            string: "Save text or a screenshot from any Mac app, and see it again later.\n",
             attributes: [.font: NSFont.systemFont(ofSize: 11), .foregroundColor: NSColor.secondaryLabelColor])
         credits.append(NSAttributedString(string: "github.com/kb14/clipback", attributes: [
             .font: NSFont.systemFont(ofSize: 11), .link: URL(string: "https://github.com/kb14/clipback")!,

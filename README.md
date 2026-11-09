@@ -4,7 +4,7 @@
 
 <h1 align="center">Clipback</h1>
 
-<p align="center">Save a quote or a screenshot from any Mac app, and see it again later.</p>
+<p align="center">Save text or a screenshot from any Mac app, and see it again later.</p>
 
 Clipback is a menu bar app for saving the bits worth keeping from whatever you read on your Mac. Select some text anywhere (a web page, a Slack thread, a PDF in Preview, a reply in the Claude app) and press <kbd>⌃</kbd><kbd>⌥</kbd><kbd>Space</kbd>. It saves the text as a markdown file along with the page, file or app it came from. With nothing selected, the same keys take a screenshot instead: drag over the part of the screen you want to keep. Clipback reads the text in the screenshot on your Mac, so search can find it later.
 
