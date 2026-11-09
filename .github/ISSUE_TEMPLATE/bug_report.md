@@ -19,7 +19,7 @@ labels: bug
 
 **Your Mac**
 - macOS version:
-- Clipback version (Settings, or the DMG name):
+- Clipback version (menu bar → About Clipback):
 - Apple Silicon or Intel:
 
 If capture failed, the log helps. Run this in Terminal right after it happens and paste the output (check it first for anything private):
