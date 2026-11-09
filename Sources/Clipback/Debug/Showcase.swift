@@ -152,7 +152,7 @@ enum Showcase {
     }
 
     /// A chart of memory over time, as on the Wikipedia page.
-    private static func forgettingCurve() -> NSImage {
+    static func forgettingCurve() -> NSImage {
         Fixtures.draw(NSSize(width: 900, height: 520)) { rect in
             NSColor.white.setFill()
             rect.fill()

@@ -187,6 +187,60 @@ enum UISnapshotter {
         context.selection = "The testing effect suggests long-term memory is increased when part of the learning period is devoted to retrieving information from memory."
         await snapshotCapturePanel(context, note: "quiz myself instead of rereading the Spanish notes #lea", library: .personal,
                                    tags: ["learning", "reading", "food"], to: folder.appending(path: "capture-panel.png"))
+        if let demo = DeveloperRun.value(after: "--demo-frames") {
+            await renderDemoFrames(textContext: context, into: URL(fileURLWithPath: demo))
+        }
+    }
+
+    /// Frames for the README demo video: the real capture panel at each step of typing a note, for a text clip and
+    /// a screenshot clip, plus the chart the screenshot is taken of. Only made-up showcase content.
+    private static func renderDemoFrames(textContext: GrabbedContext, into folder: URL) async {
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let tags = ["learning", "reading", "food"]
+        let note = "quiz myself instead of rereading the Spanish notes #learning "
+        let stops = [0, 5, 12, 20, 28, 36, 44, 51, 55, note.count - 1, note.count]
+        for (index, length) in stops.enumerated() {
+            await renderPanel(textContext, note: String(note.prefix(length)), intent: .save, tags: tags,
+                              to: folder.appending(path: String(format: "text-%02d.png", index)))
+        }
+        await renderPanel(textContext, note: note, intent: .revise, tags: tags, to: folder.appending(path: "text-revise.png"))
+
+        let chart = Showcase.forgettingCurve()
+        if let tiff = chart.tiffRepresentation, let rep = NSBitmapImageRep(data: tiff) {
+            try? rep.representation(using: .png, properties: [:])?.write(to: folder.appending(path: "chart.png"))
+        }
+        guard let image = chart.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return }
+        let regionContext = GrabbedContext(
+            appIcon: NSWorkspace.shared.icon(forFile: "/Applications/Safari.app"),
+            source: ClipSource(app: "Safari", bundleID: "com.apple.Safari", window: "Forgetting curve - Wikipedia",
+                               url: "https://en.wikipedia.org/wiki/Forgetting_curve")
+        )
+        let regionNote = "each review flattens it"
+        for (index, length) in [0, 4, 11, 17, regionNote.count].enumerated() {
+            await renderPanel(regionContext, kind: .region, image: image, note: String(regionNote.prefix(length)),
+                              intent: index == 4 ? .revise : .save, tags: tags,
+                              to: folder.appending(path: String(format: "region-%02d.png", index)))
+        }
+    }
+
+    private static func renderPanel(_ context: GrabbedContext, kind: ClipKind = .text, image: CGImage? = nil,
+                                    note: String, intent: Intent, tags: [String], to url: URL) async {
+        let draft = CaptureDraft(context: context, selection: context.selection ?? "", kind: kind, image: image,
+                                 library: .personal, recentPeople: [], knownTags: tags)
+        draft.note = note
+        draft.intent = intent
+        let controller = CapturePanelController()
+        controller.present(draft)
+        try? await Task.sleep(for: .milliseconds(kind == .text ? 500 : 1200))
+        if let panel = NSApp.windows.last(where: { $0 is CapturePanel && $0.isVisible }) {
+            // As if typed: the cursor at the end, nothing selected.
+            if let field = panel.firstResponder as? NSTextView {
+                field.setSelectedRange(NSRange(location: (field.string as NSString).length, length: 0))
+            }
+            try? await Task.sleep(for: .milliseconds(150))
+            save(panel, to: url)
+            panel.orderOut(nil)
+        }
     }
 
     /// Captures the screen the way Zoom, Meet and Slack huddles do (ScreenCaptureKit, nothing excluded) while

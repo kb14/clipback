@@ -11,7 +11,7 @@ Clipback is a menu bar app for saving the bits worth keeping from whatever you r
 Then it brings things back. A quote you want to remember shows up again the next day, then after three days, a week, and so on. Something you want to raise with a colleague waits under their name until your next call. It only keeps what you clip on purpose, so it's not a clipboard manager.
 
 <p align="center">
-  <img src="docs/images/inbox.png" width="820" alt="Clipback's library window with clips from Safari, WhatsApp, Messages, Notes and Books. The selected clip is a sentence from Wikipedia's Spacing effect article, highlighted inside its paragraph, with a note and an Open page button.">
+  <img src="docs/images/demo.gif" width="820" alt="A 40-second demo. A sentence on Wikipedia's Testing effect page is selected and saved with Control-Option-Space: the capture panel opens, a note with a #learning tag is typed and Revise is picked. Then a chart on the Forgetting curve page is saved as a screenshot by dragging over it. The clip shows in Clipback's library with its highlight in context, comes back as a card in Today, and a list of things to raise waits under a person's name in Calls.">
 </p>
 
 ## Install

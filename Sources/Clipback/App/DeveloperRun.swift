@@ -6,7 +6,7 @@ import Foundation
 enum DeveloperRun {
     /// Every flag a developer tool launches Clipback with.
     private static let flags = ["--vault", "--fixtures", "--showcase", "--ui-snapshots", "--appearance", "--share-test",
-                                "--request-screen-recording"]
+                                "--request-screen-recording", "--demo-frames"]
 
     static let isActive: Bool = {
         #if DEBUG
