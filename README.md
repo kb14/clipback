@@ -36,7 +36,7 @@ Clipback updates itself. On its second launch it asks whether to check for new v
 What happens next depends on what you picked:
 
 - Revise clips come up in Today, one card at a time and at most five a day. Press <kbd>Space</kbd> if you remembered it and it comes back after 1, 3, 7, 16, 35 and then 75 days. <kbd>A</kbd> starts it over, <kbd>R</kbd> retires it.
-- Call clips are grouped by person. Before a one-on-one, open their name and copy the list as an agenda.
+- Call clips are grouped by person. Before a one-on-one, open their name and copy the list as an agenda. If the call doesn't happen, copy one item instead: your note and its screenshot go on the clipboard together, ready to paste into a chat.
 - To-do clips are a checklist.
 - Save clips just stay in the library, searchable.
 

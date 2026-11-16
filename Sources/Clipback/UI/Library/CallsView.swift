@@ -185,7 +185,44 @@ private struct AgendaItem: View {
                     .foregroundStyle(Intent.call.color)
                     .lineLimit(1)
             }
+            Button(action: copyItem) {
+                Image(systemName: "doc.on.doc")
+            }
+            .buttonStyle(.borderless)
+            .help(clip.kind == .text ? "Copy your note and the text" : "Copy your note and the screenshot")
+            .accessibilityLabel("Copy item \(number)")
         }
+    }
+
+    /// Puts this one item on the clipboard to paste into a chat: your note as text and, for a screenshot, the
+    /// picture with it. Both ride on a single pasteboard item, which is what Slack needs to take the two together.
+    private func copyItem() {
+        let text = Agenda.itemText(clip)
+        let item = NSPasteboardItem()
+        var picture = false
+        if clip.kind != .text, let url = stored.imageURL, let png = Self.pngData(at: url) {
+            item.setData(png, forType: .png)
+            picture = true
+        }
+        if !text.isEmpty { item.setString(text, forType: .string) }
+        guard picture || !text.isEmpty else {
+            Toast.shared.show("Nothing to copy: the screenshot file is missing")
+            return
+        }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.writeObjects([item])
+        if clip.kind == .text {
+            Toast.shared.show("Copied item \(number)")
+        } else {
+            Toast.shared.show(picture ? "Copied item \(number) with its screenshot" : "Copied the note. The screenshot file is missing")
+        }
+    }
+
+    /// Large screenshots are stored as JPEG; chat apps reliably take PNG from the clipboard.
+    private static func pngData(at url: URL) -> Data? {
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        if url.pathExtension.lowercased() == "png" { return data }
+        return NSBitmapImageRep(data: data)?.representation(using: .png, properties: [:])
     }
 
     @ViewBuilder
@@ -209,11 +246,13 @@ private struct AgendaItem: View {
         } else if let url = stored.imageURL, let image = NSImage(contentsOf: url) {
             VStack(alignment: .leading, spacing: 6) {
                 Button { enlarged = image } label: {
-                    // Sized exactly to the image, so the border and corners hug it.
+                    // Sized exactly to the image, so the border and corners hug it, and narrower when the
+                    // pane is: a fixed width pushed the whole item, copy button included, off a small window.
                     let size = Self.fitted(image.size, maxWidth: 520, maxHeight: 260)
                     Image(nsImage: image)
                         .resizable()
-                        .frame(width: size.width, height: size.height)
+                        .aspectRatio(image.size, contentMode: .fit)
+                        .frame(maxWidth: size.width)
                         .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                         .overlay(RoundedRectangle(cornerRadius: 6, style: .continuous).strokeBorder(.separator, lineWidth: 0.5))
                 }

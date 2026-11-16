@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 (2026-11-16)
+
+- Calls: a copy button on each item puts your note and its screenshot on the clipboard together, to paste into Slack or another chat. For a text clip it copies your note and the text.
+- Calls: a screenshot now shrinks to fit a narrow window. Before, a wide one pushed the item off the side.
+
 ## 0.1.0 (2026-11-09)
 
 First public release.

@@ -242,6 +242,20 @@ private let created = Date(timeIntervalSince1970: 1_793_005_330)
         let text = Agenda.markdown(person: "Sam", clips: clips, date: created, timeZone: ist, locale: Locale(identifier: "en_GB"))
         #expect(text == "## Sam · 26 Oct\n\n1. check margin\n   > Two pricing options by Friday\n2. Partner list\n   > Three partners\n")
     }
+
+    @Test func agendaItemTextIsTheNoteAndForTextClipsTheQuote() {
+        let text = Clip(library: .work, intent: .call, person: "Sam", title: "Pricing", source: ClipSource(app: "Granola"),
+                        selection: "Two pricing options\nby Friday\n", note: "check margin @Sam #q4")
+        #expect(Agenda.itemText(text) == "check margin\n\nTwo pricing options\nby Friday")
+
+        let screenshot = Clip(library: .work, intent: .call, person: "Sam", title: "Chart", source: ClipSource(app: "Chrome"),
+                              kind: .region, image: "chart.png", ocr: "Q3 revenue", selection: "", note: "who owns this?")
+        #expect(Agenda.itemText(screenshot) == "who owns this?")
+
+        let bare = Clip(library: .work, intent: .call, person: "Sam", title: "Chart", source: ClipSource(app: "Chrome"),
+                        kind: .region, image: "chart.png", ocr: "Q3 revenue", selection: "")
+        #expect(Agenda.itemText(bare) == "")
+    }
 }
 
 @Suite struct SourceKeyTests {
