@@ -97,4 +97,13 @@ public enum Agenda {
         }
         return lines.joined(separator: "\n") + "\n"
     }
+
+    /// One item as text to paste somewhere else: your note, then the highlighted text of a text clip in full.
+    /// A screenshot is copied as a picture beside this, so its text is the note alone (empty without one).
+    public static func itemText(_ clip: Clip) -> String {
+        let note = NoteParser.readable(clip.note)
+        guard clip.kind == .text else { return note }
+        let quote = clip.selection.trimmingCharacters(in: .whitespacesAndNewlines)
+        return [note, quote].filter { !$0.isEmpty }.joined(separator: "\n\n")
+    }
 }
